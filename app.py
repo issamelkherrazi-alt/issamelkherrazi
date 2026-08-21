@@ -947,6 +947,15 @@ def profits_commissions():
 
     q = request.args.get("q", "").strip(); needle = q.casefold().lstrip("#")
     status = request.args.get("status", "all")
+    current_year = date.today().year
+    years = list(range(2025, current_year + 1))
+    selected_year = request.args.get("year", "all").strip()
+    if selected_year != "all":
+        try:
+            year_int = int(selected_year)
+            rows = [row for row in rows if str(row["command"].get("date_commande") or "")[:4] == str(year_int)]
+        except (TypeError, ValueError):
+            selected_year = "all"
     if needle:
         rows = [row for row in rows if any(needle in str(value or "").casefold() for value in
                 (row["command"].get("client"), row["command"].get("container_no"), row["command"].get("bl_no"),
@@ -971,7 +980,7 @@ def profits_commissions():
     profit_groups = list(grouped.values())
     for group in profit_groups:
         for key in ("cost","billed","commission","profit"): group[key] = round(group[key],2)
-    return render_template("profits_commissions.html", rows=rows, groups=profit_groups, totals=totals, q=q, status=status, tables=TABLES)
+    return render_template("profits_commissions.html", rows=rows, groups=profit_groups, totals=totals, q=q, status=status, years=years, selected_year=selected_year, tables=TABLES)
 
 @app.post("/<table>/bulk-delete")
 def bulk_delete(table):
