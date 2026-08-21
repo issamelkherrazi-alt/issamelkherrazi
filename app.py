@@ -53,7 +53,7 @@ TABLES = {
     "commandes": {
         "title": "Commandes", "icon": "📦", "pk": "id",
         "fields": [("client", "Client", "client"), ("client_ref", "Réf Client", "uppercase"),
-                   ("invoice_no", "N° facture automatique", "calculated_text"),
+                   ("invoice_no", "N° facture automatique", "text"),
                    ("consignee", "CONSIGNEE", "client_info"),
                    ("address", "ADDRESS", "client_info"), ("telephone", "TELEPHONE", "client_info"),
                    ("ice", "ICE", "client_info"), ("produit", "Produit / Marchandise", "text"),
@@ -317,9 +317,11 @@ def sync_auto_invoice_numbers(user_id):
     commands = g.supabase.table("commandes").select("id,client,client_ref,date_commande,invoice_no").order("date_commande").order("id").execute().data
     annotate_command_numbers(commands)
     for command in commands:
-        numero = automatic_invoice_number(command)
-        if command.get("invoice_no") != numero:
+        # Keep a manually edited command invoice number. Generate one only when empty.
+        numero = str(command.get("invoice_no") or "").strip() or automatic_invoice_number(command)
+        if not str(command.get("invoice_no") or "").strip():
             g.supabase.table("commandes").update({"invoice_no": numero, "updated_by": user_id}).eq("id", command["id"]).execute()
+        # Supplier and client invoices always follow the command number.
         g.supabase.table("factures").update({"numero": numero, "updated_by": user_id}).eq("commande_id", command["id"]).execute()
         g.supabase.table("factures_clients").update({"numero": numero, "updated_by": user_id}).eq("commande_id", command["id"]).execute()
 
@@ -797,7 +799,7 @@ def edit(table, item_id=None):
             commands_numbered = g.supabase.table("commandes").select("id,client,client_ref,date_commande").order("id").execute().data
             annotate_command_numbers(commands_numbered)
             numbered_command = next((c for c in commands_numbered if str(c.get("id")) == str(command.get("id"))), command)
-            values.update(numero=automatic_invoice_number(numbered_command), client=command.get("client") or "", marchandises_rmb=merchandise,
+            values.update(numero=(command.get("invoice_no") or automatic_invoice_number(numbered_command)), client=command.get("client") or "", marchandises_rmb=merchandise,
                           ocean_freight_rmb=freight_rmb, commission_rmb=commission, montant=total,
                           autres_charges_json=json.dumps(normalized_charges, ensure_ascii=False), autre_charge_rmb=extra_charge_total,
                           total_usd=round(total / rate, 2) if rate else 0, paiements_json=json.dumps(payment_rows, ensure_ascii=False),
