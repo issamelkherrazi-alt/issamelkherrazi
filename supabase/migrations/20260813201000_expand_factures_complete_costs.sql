@@ -1,0 +1,15 @@
+alter table public.factures
+  add column if not exists marchandises_rmb numeric default 0,
+  add column if not exists ocean_freight_usd numeric default 0,
+  add column if not exists exchange_rate numeric default 0,
+  add column if not exists ocean_freight_rmb numeric default 0,
+  add column if not exists local_frais_rmb numeric default 0,
+  add column if not exists commission_pct numeric default 0,
+  add column if not exists commission_rmb numeric default 0,
+  add column if not exists autre_charge_rmb numeric default 0,
+  add column if not exists frais_coc_rmb numeric default 0,
+  add column if not exists note_charge text,
+  add column if not exists total_usd numeric default 0,
+  add column if not exists paiements_json text default '[]',
+  add column if not exists recu_rmb numeric default 0,
+  add column if not exists reste_rmb numeric default 0;

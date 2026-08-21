@@ -1,0 +1,15 @@
+/* Couleurs fonctionnelles V5 */
+.calculated{font-weight:800;border-width:2px!important}
+input[name="ocean_freight_rmb"]{background:#eaf4ff;border-color:#6ca9ef;color:#135da8}
+input[name="total_rmb"]{background:#e6f8ed;border-color:#53bd7e;color:#116a36}
+input[name="total_usd"]{background:#f1ebff;border-color:#9b7be8;color:#5b35ae}
+input[name="total_dhs"]{background:#fff1df;border-color:#eea650;color:#9a5010}
+input[name="montant_container_rmb"],input[name="commission_rmb"]{background:#fffceb;border-color:#dec85e}input[name="montant_client_rmb"]{background:#eefbf3;border-color:#36b96b;color:#08783a;font-weight:800}
+label:has(input[name="total_rmb"]) span{color:#168246}
+label:has(input[name="total_usd"]) span{color:#6941bd}
+label:has(input[name="total_dhs"]) span{color:#b65e0b}
+.card:nth-child(1){border-top:4px solid #377ee9}.card:nth-child(2){border-top:4px solid #7a55d9}.card:nth-child(3){border-top:4px solid #e1a22c}.card:nth-child(4){border-top:4px solid #28a76b}.card:nth-child(5){border-top:4px solid #e05a65}
+.money-field{grid-column:2}.info-field{grid-column:1}.full{grid-column:1/-1!important}.payment-row{display:grid;grid-template-columns:1fr 1fr 1fr 42px;gap:8px;margin:7px 0}.payment-row button{border:0;border-radius:8px;background:#fee8e8;color:#bd2732;font-size:22px}.add-payment{width:max-content;border:0;border-radius:8px;background:#e8f1ff;color:#1769e0;padding:9px 14px;font-weight:700}input[name="recu_payment_rmb"]{background:#fff1df;border-color:#eea650;color:#9a5010}@media(max-width:700px){.money-field,.info-field{grid-column:auto}.payment-row{grid-template-columns:1fr}}
+input[name="reste_a_payer_rmb"]{background:#ffe9e9;border-color:#e76666;color:#a71919}
+.invoice-line{display:grid;grid-template-columns:2fr 1fr 42px;gap:8px;margin:8px 0}.invoice-line button{border:0;border-radius:8px;background:#fee8e8;color:#bd2732;font-size:22px}
+label:has(input[name="reste_a_payer_rmb"]){grid-column:2}
