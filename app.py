@@ -664,6 +664,9 @@ def dashboard():
             stage = "complete"; stage_label = "Dossier facturé"
         dossier_pipeline.append({"command": command, "supplier_invoice": supplier_invoice,
                                  "client_invoice": client_invoice, "stage": stage, "stage_label": stage_label})
+    # Priority display: dossiers needing action first, completed dossiers last.
+    stage_priority = {"missing_supplier": 0, "missing_client": 1, "complete": 2}
+    dossier_pipeline.sort(key=lambda row: (stage_priority.get(row["stage"], 99), -(row["command"].get("id") or 0)))
     pipeline_counts = {
         "missing_supplier": sum(1 for row in dossier_pipeline if row["stage"] == "missing_supplier"),
         "missing_client": sum(1 for row in dossier_pipeline if row["stage"] == "missing_client"),
